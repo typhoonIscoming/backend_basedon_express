@@ -79,6 +79,7 @@ module.exports = function(app) {
         // console.log('req', req.query)
         const cache = myCache.get('access');
         let access = {};
+        // console.log('cache', cache)
         // 如果缓存有数据，则直接返回
         if (cache && cache.access_token) {
             access = cache;
@@ -86,26 +87,45 @@ module.exports = function(app) {
         } else {
             const result = await request('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx430976683b8d2262&secret=a0cf1ccf45ff156468e0d1e72dde3303');
             access = JSON.parse(result);
+
+            if (!access.access_token) {
+                res.send({ code: 1, data: access })
+                return
+            }
             // 将access_token缓存起来
             myCache.set('access', access);
-            // console.log('接口')
+            // console.log('接口 result', result)
         }
         // 拿到了access_token之后再去获取票据(jsapi_ticket)
         // console.log('access', access.access_token)
         const getticket = await request(`https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${access.access_token}&type=jsapi`);
         const tickObj = JSON.parse(getticket);
 
-        const noncestr = tools.generateUUID();
-        const timestamp = +new Date();
+        if (!tickObj.ticket) {
+            res.send({ code: 2, data: tickObj })
+            return
+        }
 
+        const noncestr = tools.generateUUID();
+        const timestamp = Math.floor(+new Date() / 1000);
+        // console.log('tickObj', tickObj)
         const url = req.query.url;
-        const signature = sha1(qs.stringify({
+        const list = ['noncestr', 'jsapi_ticket', 'timestamp', 'url'];
+        
+        const obj = {
             noncestr, // 随机字符串
             jsapi_ticket: tickObj.ticket, // 票据
             timestamp,
             url,
-        })) 
-
+        }
+        // 微信要求按照ASCII码由大到小排序
+        let str = '';
+        const sortedList = list.sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0));
+        sortedList.forEach((item, index) => {
+            str += `${item}=${obj[item]}${index === sortedList.length - 1 ? '' : '&'}`
+        })
+        // console.log('sortedList', sortedList, str);
+        const signature = sha1(str);
         res.send({
             noncestr,
             timestamp,
