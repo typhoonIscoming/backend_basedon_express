@@ -5,11 +5,12 @@ const request = require('request-promise');
 const NodeCache = require('node-cache');
 
 const qs = require('qs');
-
-const tools = require('../src/utils/tools');
-
 // 加密库
 const sha1 = require('sha1');
+
+const tools = require('../src/utils/tools');
+const { sqlConnect } = require('./sql/sql-connection');
+
 
 // 微信的secrect有效期是7200秒
 const myCache = new NodeCache({ stdTTL: 7100, checkperiod: 120 });
@@ -24,8 +25,12 @@ module.exports = function(app) {
     })
 
     app.get('/', function(req, res) {
-        const query = req.query
-        res.send(query)
+        const query = req.query;
+        const sqlQuery = 'select * from user';
+        sqlConnect.query(sqlQuery, (err, result) => {
+            // console.log(err, result)
+            res.send(err || result)
+        })
     })
     
     app.post('/', function(req, res) {
