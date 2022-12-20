@@ -1,9 +1,12 @@
 import express from 'express';
+
 const bodyParse = require('body-parser');
+
+import routes from './routes';
 
 const app = express();
 
-console.log(app);
+// console.log(app);
 
 app.all('*', (req, res, next) => {
     const { origin, Origin, referer, Referer } = req.headers;
@@ -32,6 +35,8 @@ app.use(express.static('./public', { extensions: ['png', 'jpg', 'html', 'mp4'] }
 app.use(express.json({ limit: 2 }));
 app.use(bodyParse.json())
 
+routes(app);
+
 app.listen(3080, function(data) {
-    console.log('created a server')
+    console.log('created a server, 成功监听端口：', 3080)
 })
