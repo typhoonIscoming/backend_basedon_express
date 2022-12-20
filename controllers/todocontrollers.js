@@ -26,7 +26,7 @@ module.exports = function(app) {
 
     app.get('/', function(req, res) {
         const query = req.query;
-        const sqlQuery = 'select * from user';
+        const sqlQuery = 'select * from user;';
         sqlConnect.query(sqlQuery, (err, result) => {
             // console.log(err, result)
             res.send(err || result)
