@@ -1,26 +1,33 @@
-const mysql = require('mysql');
+import mysql from 'mysql2';
 
-let connectionInstance = null;
+const config = require('config-lite')({
+    config_dir: 'config',
+    config_basedir: __dirname,
+});
 
-function getInstannce() {
-    if (!connectionInstance) {
-        connectionInstance = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'tsehangadmin',
-            database: 'demo',
-        })
+export default class Database {
+    constructor() {
+        this.database = null;
+        this.init();
     }
-    connectionInstance.connect((err) => {
-        if (!err) {
-            console.log('Database is connected ... nn');
-        } else {
-            console.log('Error connecting database ... nn');
-        }
-    })
-    return connectionInstance
-}
-
-module.exports = {
-    sqlConnect: new getInstannce(),
+    init() {
+        const { host, user, password, database } = config.database || {};
+        this.database = mysql.createConnection({
+            host,
+            user,
+            password,
+            database,
+        });
+        this.database.connect((err) => {
+            // console.log('database connect err', err)
+        })
+        this.database.on('error', (err) => {
+            // console.log('err', err)
+        })
+        // 监听node进程是否关闭
+        // process.on('SIGINT', () => {
+        //     console.log('close mysql conect')
+        //     this.database.end();
+        // });
+    }
 }
