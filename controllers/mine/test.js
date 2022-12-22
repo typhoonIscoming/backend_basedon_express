@@ -15,8 +15,19 @@ class Detail extends Base {
     }
     handleGetData() {
         console.log('===', this.init())
+        return `${this.init()} and Detail`
     }
 }
 
-const detail = new Detail();
-console.log(detail.handleGetData())
+class Thrid extends Detail{
+    constructor() {
+        super();
+    }
+
+    getData() {
+        console.log('thrid print', this.handleGetData())
+    }
+}
+
+const detail = new Thrid();
+console.log(detail.getData())
