@@ -8,6 +8,7 @@ class UserHandle extends Database {
     }
 
     async getUser(req, res, next) {
+        console.log('===')
         this.database.query('select * from user', (err, result) => {
             if (!err) {
                 res.send({ data: result })
