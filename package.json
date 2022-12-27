@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "dev": "cross-env NODE_ENV=development nodemon --harmony index.js",
+        "pro": "cross-env NODE_ENV=production nodemon --harmony index.js",
         "dev:old": "nodemon server.js"
     },
     "author": "xie",

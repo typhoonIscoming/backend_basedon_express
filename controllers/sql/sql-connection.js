@@ -12,6 +12,7 @@ export default class Database {
     }
     init() {
         const { host, user, password, database } = config.database || {};
+        console.log('host', host)
         this.database = mysql.createConnection({
             host,
             user,
@@ -19,10 +20,10 @@ export default class Database {
             database,
         });
         this.database.connect((err) => {
-            // console.log('database connect err', err)
+            console.log('database connect err', err)
         })
         this.database.on('error', (err) => {
-            // console.log('err', err)
+            console.log('err', err)
         })
         // 监听node进程是否关闭
         // process.on('SIGINT', () => {

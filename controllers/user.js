@@ -16,6 +16,8 @@ class UserHandle extends Database {
             }
         })
     }
+
+    
 }
 
 export default new UserHandle();
