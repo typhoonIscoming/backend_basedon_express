@@ -17,7 +17,15 @@ class UserHandle extends Database {
         })
     }
 
-    
+    getUserInfo(req, res) {
+        this.database.query('select * from user where id=1', (err, result) => {
+            if (!err) {
+                res.send({ data: result })
+            } else {
+                res.send(err)
+            }
+        })
+    }
 }
 
 export default new UserHandle();
