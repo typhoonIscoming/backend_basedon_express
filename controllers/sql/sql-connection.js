@@ -31,7 +31,7 @@ export default class Database {
         //     this.database.end();
         // });
     }
-    query(sql, cb) {
+    query(sql, cb = () => {}) {
         this.database.query(sql, (err, result) => {
             if (!err) {
                 cb({ data: result })
