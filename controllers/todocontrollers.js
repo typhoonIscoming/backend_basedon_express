@@ -24,14 +24,14 @@ module.exports = function(app) {
         res.render('ejs.html', { todos: data });
     })
 
-    app.get('/', function(req, res) {
-        const query = req.query;
-        const sqlQuery = 'select * from user;';
-        sqlConnect.query(sqlQuery, (err, result) => {
-            // console.log(err, result)
-            res.send(err || result)
-        })
-    })
+    // app.get('/', function(req, res) {
+    //     const query = req.query;
+    //     const sqlQuery = 'select * from user;';
+    //     sqlConnect.query(sqlQuery, (err, result) => {
+    //         // console.log(err, result)
+    //         res.send(err || result)
+    //     })
+    // })
     
     app.post('/', function(req, res) {
         console.dir(req.body)
