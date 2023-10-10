@@ -1,11 +1,12 @@
-import mysql from 'mysql2';
+// import mysql from 'mysql2';
+const mysql = require('mysql2');
 
 const config = require('config-lite')({
     config_dir: 'config',
     config_basedir: __dirname,
 });
 
-export default class Database {
+class Database {
     constructor() {
         this.database = null;
         this.init();
@@ -41,3 +42,6 @@ export default class Database {
         })
     }
 }
+
+// module.exports = { Database }
+export default Database

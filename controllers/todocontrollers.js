@@ -9,7 +9,7 @@ const qs = require('qs');
 const sha1 = require('sha1');
 
 const tools = require('../src/utils/tools');
-const { sqlConnect } = require('./sql/sql-connection');
+
 
 
 // 微信的secrect有效期是7200秒
